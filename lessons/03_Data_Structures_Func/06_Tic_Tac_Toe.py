@@ -9,13 +9,13 @@ O_MARK = "O"
 
 def check_row(l):
     """Check if a player won on a row
+    
     Args:
         l: a 3 element iterable
         
     Returns:
         The winner's token ( x or o ) if there is one, otherwise None
         """
-
     return None
 
 def check_win(board):
@@ -26,7 +26,6 @@ def check_win(board):
     Returns:
         The winner's token ( x or o ) if there is one, otherwise None
     """
-
     return None
 
 # The following code is the main part of the program. It creates a GUI for the
