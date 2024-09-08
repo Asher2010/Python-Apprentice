@@ -9,7 +9,7 @@ O_MARK = "O"
 
 def check_row(l):
     """Check if a player won on a row
-    
+    use
     Args:
         l: a 3 element iterable
         
