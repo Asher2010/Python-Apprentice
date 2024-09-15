@@ -12,10 +12,11 @@ def check_row(l):
     use
     Args:
         l: a 3 element iterable
-        
+
     Returns:
         The winner's token ( x or o ) if there is one, otherwise None
         """
+    
     return None
 
 def check_win(board):
