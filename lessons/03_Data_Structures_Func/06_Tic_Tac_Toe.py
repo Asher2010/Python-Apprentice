@@ -16,8 +16,17 @@ def check_row(l):
     Returns:
         The winner's token ( x or o ) if there is one, otherwise None
         """
+    if l == ['X','X','X']:
+        
+        return "x"
     
-    return None
+    elif l == ['O', 'O', 'O']:
+
+        return "o"
+    
+    else:
+        return None
+    
 
 def check_win(board):
     """Check if a player has won on a board
@@ -27,8 +36,44 @@ def check_win(board):
     Returns:
         The winner's token ( x or o ) if there is one, otherwise None
     """
-    return None
+    
 
+
+
+def check_board(board):
+    """Check if a player has won on a board
+    Args:
+        board: a 3x3 2D array
+    
+    Returns:
+        The winner's token ( x or o ) if there is one, otherwise None
+    """
+    def get_column(col_num):
+        col = [board[0][col_num], board[1][col_num], board[2][col_num]]
+        return col
+
+
+    for row in board:
+        winner = check_row(row)
+        if winner:
+            return winner
+        
+    for i in range(3):
+        col = get_column(i)
+        winner = check_row(col)
+        if winner:
+            return winner
+        
+    if [board[0][0], board[1][1], board[2][2]] == ['X','X','X']:
+        return 'X'
+    elif [board[0][0], board[1][1], board[2][2]] == ['O','O','O']:
+        return 'O'
+    if [board[0][2], board[1][1], board[2][0]] == ['X','X','X']:
+        return 'X'
+    elif [board[0][2], board[1][1], board[2][0]] == ['O','O','O']:
+        return 'O'
+    
+    print([board[0][0], board[1][1], board[2][2]])
 # The following code is the main part of the program. It creates a GUI for the
 # game and handles the game logic. Implement the functions above first, then
 # after your program is working you can try chaning the code below. 
@@ -55,7 +100,7 @@ class TicTacToe:
 
         self.message.text_color = "green"
 
-        self.win_func = win_func
+        self.win_func = check_board
 
         self.reset()
 
@@ -91,7 +136,7 @@ class TicTacToe:
         self.turn_n += 1
         self.message.value = f"It's your turn, {self.current_turn}"
 
-        winner = self.win_func(self.board)
+        winner = check_board(self.board)
 
         if winner:
             self.message.value = f"Player {winner} won!"
@@ -102,6 +147,7 @@ class TicTacToe:
         elif self.turn_n == 9:
             self.message.value = "It's a draw!"
             info("Tic-tac-toe","It's a draw!")
+        
 
 ttt = TicTacToe(check_win)
 ttt.start()
