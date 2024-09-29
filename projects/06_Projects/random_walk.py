@@ -60,8 +60,11 @@ def random_walk(walker, steps):
     # Read one of the past turtle programs to see how to use these methods.
 
     # Your code here
-    direction = random.choice(["N", "E", "S", "W"])
+    direction = random.choice([0, 90, 180, 270])
     walker.setheading(direction)
+    walker.forward(steps)
+
+
 
 
 # Start the random walk
