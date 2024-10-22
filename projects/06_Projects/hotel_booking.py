@@ -21,14 +21,29 @@ def main():
 
     def display_room_types():
         print("Available Room Types:")
-        print("1. Suite: $100 per night")
-        print("2. Balcony Suite: $150 per night")
-        print("3. Penthouse Suite: $300 per night\n")
+        print("1. Suite: $100 per night (Floors 1-9)")
+        print("2. Balcony Suite: $150 per night (Rooms 15-20 on Floors 1-9)")
+        print("3. Penthouse Suite: $300 per night (Floor 10)\n")
 
     def display_available_rooms(suite_type):
         print("Available Rooms:")
         base_price = get_base_price(suite_type)
-        for floor in range(1, 11):
+        if suite_type == "suite":
+            for floor in range(1, 10):
+                print(f"Floor {floor}:")
+                room_prices = [f" Room {room}: ${base_price}" for room in range(1, 21) if hotel[floor][room] is None]
+                print("".join(room_prices))
+                print()
+
+        elif suite_type == "balcony":
+            for floor in range(1, 10):
+                print(f"Floor {floor}:")
+                room_prices = [f" Room {room}: ${base_price}" for room in range(15, 21) if hotel[floor][room] is None]
+                print("".join(room_prices))
+                print()
+
+        elif suite_type == "penthouse":
+            floor = 10
             print(f"Floor {floor}:")
             room_prices = [f" Room {room}: ${base_price}" for room in range(1, 21) if hotel[floor][room] is None]
             print("".join(room_prices))
@@ -40,7 +55,6 @@ def main():
             total_charge = base_price * nights
             hotel[floor][RN] = (True, name, CIT, card, total_charge, 0)
             print(f"Checked in {name} to room {RN} on floor {floor} for {nights} nights at ${base_price} per night.")
-            display_available_rooms(suite_type)
             return True
         else:
             print(f"Room {RN} is already occupied by {hotel[floor][RN][1]}.")
@@ -79,24 +93,51 @@ def main():
     print("Welcome to the Hotel Management System!\n")
     display_room_types()
     print("Commands:")
-    print("CI <name> <check-in time> <floor> <room number> <has credit card (True/False)> <nights> <suite type>")
+    print("CI <name> <check-in date> <paying with card (True/False)>")
     print("CO <floor> <room number>")
     print("RS <floor> <room number> <item number>")
     print("Menu to display menu items")
     print("Exit to leave the system")
+    print()
 
     while True:
         cmd = input().strip().split()
         if cmd[0] == "CI":
             try:
-                floor = int(cmd[3])
-                RN = int(cmd[4])
-                nights = int(cmd[6])
-                suite_type = cmd[7].lower()
-                if CI(cmd[1], cmd[2], floor, RN, cmd[5].lower() == 'true', nights, suite_type):
+                room_type = int(input("Choose room type (1, 2, or 3): "))
+                if room_type == 1:
+                    suite_type = "suite"
+                    available_floors = range(1, 10)
+                elif room_type == 2:
+                    suite_type = "balcony"
+                    available_floors = range(1, 10)
+                elif room_type == 3:
+                    suite_type = "penthouse"
+                    available_floors = [10]
+                else:
+                    print("Invalid room type. Choose 1, 2, or 3.\n")
+                    continue
+
+                display_available_rooms(suite_type)
+
+                if suite_type == "penthouse":
+                    floor = 10
+                    RN = int(input("Enter room number: "))
+                else:
+                    floor = int(input("Enter floor number: "))
+                    if floor not in available_floors:
+                        print(f"Invalid floor for selected room type. Choose from {available_floors}.\n")
+                        continue
+                    
+                    RN = int(input("Enter room number: "))
+                
+                nights = int(input("Enter number of nights: "))
+                
+                if CI(cmd[1], cmd[2], floor, RN, cmd[3].lower() == 'true', nights, suite_type):
                     print("Check-in successful!\n")
-            except:
-                print("To check in input the name, check-in time, floor number, room number, if you have a credit card (True/False), number of nights, and suite type. Ex. (CI Bob 10/20/24 2 2 True 3 suite)\n")
+            except Exception as e:
+                print("Error in check-in:", e)
+                print()
         elif cmd[0] == "CO":
             try:
                 CO(int(cmd[1]), int(cmd[2]))
